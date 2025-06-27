@@ -10,21 +10,25 @@
     body { font-family: 'Inter', 'Lato', 'Segoe UI', Arial, sans-serif; }
   </style>
 </head>
-<body class="bg-[#181818] font-sans min-h-screen">
-  <div id="app" class="flex h-screen gap-8 p-6">
+<body class="bg-gradient-to-br from-[#181818] via-[#23272a] to-[#23272a] font-sans min-h-screen">
+  <div id="app" class="flex h-screen gap-10 p-8">
     <!-- Left Panel: Navigation & Project Management -->
-    <aside class="w-72 bg-[#23272a] rounded-2xl shadow-lg flex flex-col p-8 text-white gap-8 h-full">
+    <aside class="w-80 bg-gradient-to-br from-[#23272a] to-[#374151] rounded-3xl shadow-2xl flex flex-col p-10 text-white gap-10 h-full relative overflow-hidden">
+      <!-- Logo Placeholder -->
+      <div class="flex items-center justify-center mb-4">
+        <img src="media/kraven-security-logo.jpg" alt="Kraven Security Logo" class="w-14 h-14 rounded-2xl shadow-lg object-contain bg-black" />
+      </div>
       <h2 class="text-2xl font-extrabold mb-8 tracking-wide">Projects</h2>
-      <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">New Analysis</button>
+      <button class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg">New Analysis</button>
       <ul id="project-list" class="flex-1 overflow-y-auto space-y-2">
         <!-- Project items will go here -->
       </ul>
       <!-- Clear Project button will be inserted here by JS -->
     </aside>
     <!-- Center Panel: Workbench -->
-    <main class="flex-1 flex flex-col p-12 overflow-y-auto bg-white shadow-2xl rounded-2xl">
-      <h1 class="text-4xl font-extrabold mb-12 text-[#1a2332] tracking-tight">ACH Digital Workbench</h1>
-      <div id="workbench" class="flex flex-col gap-12">
+    <main class="flex-1 flex flex-col p-14 overflow-y-auto bg-white/80 shadow-2xl rounded-3xl backdrop-blur-md border border-white/30">
+      <h1 class="text-5xl font-extrabold mb-14 text-[#1a2332] tracking-tight drop-shadow-lg">ACH Digital Workbench</h1>
+      <div id="workbench" class="flex flex-col gap-14">
         <!-- HypothesisCanvas, EvidenceLocker, ACH_Matrix, ResultsDashboard will be rendered here -->
       </div>
     </main>

@@ -37,11 +37,11 @@ function renderHypothesisCanvas() {
   list.className = 'flex flex-wrap gap-6';
   hypotheses.forEach((hypo, idx) => {
     const card = document.createElement('div');
-    card.className = 'bg-[#f6f8fa] border border-gray-200 rounded-2xl shadow p-6 w-72 relative';
+    card.className = 'bg-white/80 border border-gray-200 rounded-2xl shadow p-4 w-64 relative transition-all duration-200 hover:shadow-xl';
     card.innerHTML = `
-      <input type="text" value="${hypo.title}" class="font-bold text-lg w-full mb-2 outline-none focus:ring-2 focus:ring-blue-200 bg-white rounded" data-idx="${idx}" />
-      <textarea class="w-full text-gray-700 mb-2 p-2 border border-gray-100 rounded resize-none outline-none focus:ring-2 focus:ring-blue-100 bg-white" rows="2" placeholder="Description (optional)" data-idx="${idx}">${hypo.description || ''}</textarea>
-      <button class="absolute top-2 right-2 text-red-400 hover:text-red-700 text-xl" data-del="${idx}" title="Delete">&times;</button>
+      <input type="text" value="${hypo.title}" class="font-bold text-base w-full mb-2 outline-none focus:ring-2 focus:ring-green-300 bg-white rounded-lg transition-all duration-200" data-idx="${idx}" />
+      <textarea class="w-full text-gray-700 mb-2 p-2 border border-gray-100 rounded-lg resize-none outline-none focus:ring-2 focus:ring-green-100 bg-white transition-all duration-200 text-sm" rows="2" placeholder="Description (optional)" data-idx="${idx}">${hypo.description || ''}</textarea>
+      <button class="absolute top-2 right-2 text-red-400 hover:text-red-700 text-lg transition-all duration-200" data-del="${idx}" title="Delete">&times;</button>
     `;
     list.appendChild(card);
   });
@@ -124,33 +124,35 @@ function renderEvidenceLocker() {
   list.className = 'flex flex-wrap gap-6';
   evidenceList.forEach((ev, idx) => {
     const card = document.createElement('div');
-    card.className = 'bg-[#f6f8fa] border border-gray-200 rounded-2xl shadow p-6 w-96 relative';
+    card.className = 'bg-white/80 border border-gray-200 rounded-2xl shadow p-4 w-80 relative transition-all duration-200 hover:shadow-xl overflow-hidden';
     card.innerHTML = `
-      <input type="text" value="${ev.statement}" placeholder="Evidence statement" class="font-bold text-base w-full mb-2 outline-none focus:ring-2 focus:ring-blue-200 bg-white rounded" data-idx="${idx}" data-field="statement" />
-      <input type="text" value="${ev.source}" placeholder="Source (URL, report, etc.)" class="w-full text-gray-700 mb-2 p-2 border border-gray-100 rounded outline-none focus:ring-2 focus:ring-blue-100 bg-white" data-idx="${idx}" data-field="source" />
-      <div class="flex items-center mb-2 gap-2">
-        <label class="text-sm text-[#1a2332]">Source Reliability:</label>
-        <select class="p-1 border rounded bg-white" data-idx="${idx}" data-field="sourceReliability">
-          <option value="A" ${ev.sourceReliability === 'A' ? 'selected' : ''}>A (Completely reliable)</option>
-          <option value="B" ${ev.sourceReliability === 'B' ? 'selected' : ''}>B (Usually reliable)</option>
-          <option value="C" ${ev.sourceReliability === 'C' ? 'selected' : ''}>C (Fairly reliable)</option>
-          <option value="D" ${ev.sourceReliability === 'D' ? 'selected' : ''}>D (Not usually reliable)</option>
-          <option value="E" ${ev.sourceReliability === 'E' ? 'selected' : ''}>E (Unreliable)</option>
-          <option value="F" ${ev.sourceReliability === 'F' ? 'selected' : ''}>F (Cannot be judged)</option>
-        </select>
+      <input type="text" value="${ev.statement}" placeholder="Evidence statement" class="font-bold text-sm w-full mb-2 outline-none focus:ring-2 focus:ring-green-300 bg-white rounded-lg transition-all duration-200 truncate" data-idx="${idx}" data-field="statement" />
+      <input type="text" value="${ev.source}" placeholder="Source (URL, report, etc.)" class="w-full text-gray-700 mb-2 p-2 border border-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-green-100 bg-white transition-all duration-200 text-sm truncate" data-idx="${idx}" data-field="source" />
+      <div class="flex flex-col gap-2 mb-2">
+        <div class="flex items-center gap-2">
+          <label class="text-sm text-[#1a2332]">Source Reliability:</label>
+          <select class="p-1 border rounded-lg bg-white transition-all duration-200 text-sm w-40 max-w-full" data-idx="${idx}" data-field="sourceReliability">
+            <option value="A" ${ev.sourceReliability === 'A' ? 'selected' : ''}>A (Completely reliable)</option>
+            <option value="B" ${ev.sourceReliability === 'B' ? 'selected' : ''}>B (Usually reliable)</option>
+            <option value="C" ${ev.sourceReliability === 'C' ? 'selected' : ''}>C (Fairly reliable)</option>
+            <option value="D" ${ev.sourceReliability === 'D' ? 'selected' : ''}>D (Not usually reliable)</option>
+            <option value="E" ${ev.sourceReliability === 'E' ? 'selected' : ''}>E (Unreliable)</option>
+            <option value="F" ${ev.sourceReliability === 'F' ? 'selected' : ''}>F (Cannot be judged)</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2 mt-1">
+          <label class="text-sm text-[#1a2332]">Information Credibility:</label>
+          <select class="p-1 border rounded-lg bg-white transition-all duration-200 text-sm w-40 max-w-full" data-idx="${idx}" data-field="infoCredibility">
+            <option value="1" ${ev.infoCredibility === '1' ? 'selected' : ''}>1 (Confirmed by other sources)</option>
+            <option value="2" ${ev.infoCredibility === '2' ? 'selected' : ''}>2 (Probably true)</option>
+            <option value="3" ${ev.infoCredibility === '3' ? 'selected' : ''}>3 (Possibly true)</option>
+            <option value="4" ${ev.infoCredibility === '4' ? 'selected' : ''}>4 (Doubtful)</option>
+            <option value="5" ${ev.infoCredibility === '5' ? 'selected' : ''}>5 (Improbable)</option>
+            <option value="6" ${ev.infoCredibility === '6' ? 'selected' : ''}>6 (Cannot be judged)</option>
+          </select>
+        </div>
       </div>
-      <div class="flex items-center mb-2 gap-2">
-        <label class="text-sm text-[#1a2332]">Information Credibility:</label>
-        <select class="p-1 border rounded bg-white" data-idx="${idx}" data-field="infoCredibility">
-          <option value="1" ${ev.infoCredibility === '1' ? 'selected' : ''}>1 (Confirmed by other sources)</option>
-          <option value="2" ${ev.infoCredibility === '2' ? 'selected' : ''}>2 (Probably true)</option>
-          <option value="3" ${ev.infoCredibility === '3' ? 'selected' : ''}>3 (Possibly true)</option>
-          <option value="4" ${ev.infoCredibility === '4' ? 'selected' : ''}>4 (Doubtful)</option>
-          <option value="5" ${ev.infoCredibility === '5' ? 'selected' : ''}>5 (Improbable)</option>
-          <option value="6" ${ev.infoCredibility === '6' ? 'selected' : ''}>6 (Cannot be judged)</option>
-        </select>
-      </div>
-      <button class="absolute top-2 right-2 text-red-400 hover:text-red-700 text-xl" data-del="${idx}" title="Delete">&times;</button>
+      <button class="absolute top-2 right-2 text-red-400 hover:text-red-700 text-lg transition-all duration-200" data-del="${idx}" title="Delete">&times;</button>
     `;
     list.appendChild(card);
   });
@@ -432,7 +434,7 @@ function renderResultsDashboard() {
   keyEvidenceArr.forEach(({ ev }) => {
     const admiralty = `${ev.sourceReliability || ''}${ev.infoCredibility || ''}`;
     const li = document.createElement('li');
-    li.innerHTML = `<span class="font-semibold">${ev.statement}</span> <span class="text-xs text-gray-500">(Admiralty: ${admiralty})</span>`;
+    li.innerHTML = `<span class=\"font-semibold truncate max-w-xs inline-block align-bottom\">${ev.statement}</span> <span class=\"text-xs text-gray-500\">(Admiralty: ${admiralty})</span>`;
     keyList.appendChild(li);
   });
   if (!keyList.hasChildNodes()) {
@@ -532,7 +534,7 @@ function renderProjectList() {
   list.innerHTML = '';
   projects.forEach((proj, idx) => {
     const li = document.createElement('li');
-    li.className = `mb-2 px-2 py-1 rounded cursor-pointer ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white font-bold' : 'bg-[#C6372F] text-white hover:opacity-80'}`;
+    li.className = `mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold text-lg select-none ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
     li.textContent = proj.name;
     li.onclick = () => loadProject(idx);
     li.ondblclick = (e) => {
