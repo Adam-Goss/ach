@@ -22,7 +22,7 @@ function renderHypothesisCanvas() {
   // Header
   const header = document.createElement('div');
   header.className = 'mb-2';
-  header.innerHTML = `<h2 class="text-xl font-bold text-[#1a2332] tracking-wide">Hypotheses</h2>`;
+  header.innerHTML = `<h2 class=\"text-xl font-bold text-[#1a2332] tracking-wide\">💡 Hypotheses</h2>`;
   container.appendChild(header);
 
   // Add Hypothesis Button
@@ -109,7 +109,7 @@ function renderEvidenceLocker() {
   // Header
   const header = document.createElement('div');
   header.className = 'mb-2';
-  header.innerHTML = `<h2 class="text-xl font-bold text-[#1a2332] tracking-wide">Evidence Locker</h2>`;
+  header.innerHTML = `<h2 class=\"text-xl font-bold text-[#1a2332] tracking-wide\">🗃️ Evidence Locker</h2>`;
   container.appendChild(header);
 
   // Add Evidence Button
@@ -257,7 +257,7 @@ function renderACHMatrix() {
   // Header
   const header = document.createElement('div');
   header.className = 'flex items-center justify-between mb-4';
-  header.innerHTML = `<h2 class="text-xl font-bold text-[#1a2332] tracking-wide">ACH Matrix</h2>`;
+  header.innerHTML = `<h2 class=\"text-xl font-bold text-[#1a2332] tracking-wide\">🗂️ ACH Matrix</h2>`;
   container.appendChild(header);
 
   // Table
@@ -272,7 +272,7 @@ function renderACHMatrix() {
   headRow.appendChild(document.createElement('th')); // Empty corner
   hypotheses.forEach(hypo => {
     const th = document.createElement('th');
-    th.className = 'sticky top-0 bg-white z-10 px-4 py-2 border-b font-bold text-[#1a2332]';
+    th.className = 'sticky top-0 bg-white z-10 px-4 py-2 border-b font-bold text-[#1a2332] whitespace-normal break-words max-w-xs';
     th.textContent = hypo.title;
     headRow.appendChild(th);
   });
@@ -327,6 +327,23 @@ function renderACHMatrix() {
   tableWrap.appendChild(table);
   container.appendChild(tableWrap);
 
+  // Reset Matrix Button (moved below the table)
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset Matrix';
+  resetBtn.className = 'mt-6 px-4 py-2 bg-gray-200 text-[#C6372F] rounded hover:bg-gray-300 transition font-semibold';
+
+  resetBtn.onclick = () => {
+    for (let i = 0; i < matrixRatings.length; ++i) {
+      for (let j = 0; j < matrixRatings[i].length; ++j) {
+        matrixRatings[i][j] = 2; // N/A
+      }
+    }
+    renderACHMatrix();
+    renderResultsDashboard();
+    saveCurrentProject();
+  };
+  container.appendChild(resetBtn);
+
   // Insert below EvidenceLocker
   const evidenceLocker = document.getElementById('evidence-locker');
   if (evidenceLocker && evidenceLocker.nextSibling) {
@@ -374,12 +391,12 @@ function renderResultsDashboard() {
   // Container
   const container = document.createElement('section');
   container.id = 'results-dashboard';
-  container.className = 'mb-10';
+  container.className = 'mb-10 bg-white/80 rounded-2xl border border-gray-200 shadow-xl p-8';
 
   // Header
   const header = document.createElement('div');
   header.className = 'flex items-center justify-between mb-4';
-  header.innerHTML = `<h2 class="text-xl font-bold text-[#1a2332] tracking-wide">Results Dashboard</h2>`;
+  header.innerHTML = `<h2 class=\"text-xl font-bold text-[#1a2332] tracking-wide\">Results Dashboard</h2>`;
   container.appendChild(header);
 
   // Calculate and sort
@@ -389,22 +406,23 @@ function renderResultsDashboard() {
 
   // --- Most Likely Hypotheses ---
   const minScore = scored.length > 0 ? scored[0].inconsistencyScore : null;
-  const mostLikely = scored.filter(h => h.inconsistencyScore === minScore);
   const likelySection = document.createElement('div');
   likelySection.className = 'mb-8 flex-1';
-  likelySection.innerHTML = `<h3 class="text-lg font-semibold mb-2 text-[#1a2332]">Most Likely Hypotheses</h3>`;
+  likelySection.innerHTML = `<h3 class=\"text-lg font-semibold mb-2 text-[#1a2332]\">Most Likely Hypotheses</h3>`;
   const likelyList = document.createElement('ol');
   likelyList.className = 'mb-2';
-  mostLikely.forEach((hypo, idx) => {
+  scored.forEach((hypo, idx) => {
+    const isMostLikely = hypo.inconsistencyScore === minScore;
     const li = document.createElement('li');
-    li.className = 'flex items-center gap-4 mb-2';
+    li.className = `flex items-center gap-4 mb-2 ${isMostLikely ? 'border-2 border-green-500 bg-green-50 rounded-lg' : ''}`;
     li.innerHTML = `
-      <span class="w-6 text-right font-bold">${idx + 1}.</span>
-      <span class="flex-1">${hypo.title} <span class="text-xs text-gray-500 ml-2">(Inconsistency: ${hypo.inconsistencyScore})</span></span>
+      <span class=\"w-6 text-right font-bold\">${idx + 1}.</span>
+      <span class=\"flex-1\">${hypo.title} <span class=\"text-lg align-bottom ml-2\">📊 <span class=\"ml-1\">${hypo.inconsistencyScore}</span></span></span>
     `;
     likelyList.appendChild(li);
   });
   likelySection.appendChild(likelyList);
+  container.appendChild(likelySection);
 
   // --- Key Pieces of Evidence ---
   const keyEvidenceSection = document.createElement('div');
@@ -434,7 +452,7 @@ function renderResultsDashboard() {
   keyEvidenceArr.forEach(({ ev }) => {
     const admiralty = `${ev.sourceReliability || ''}${ev.infoCredibility || ''}`;
     const li = document.createElement('li');
-    li.innerHTML = `<span class=\"font-semibold truncate max-w-xs inline-block align-bottom\">${ev.statement}</span> <span class=\"text-xs text-gray-500\">(Admiralty: ${admiralty})</span>`;
+    li.innerHTML = `<span class=\"font-semibold truncate max-w-xs inline-block align-bottom\">${ev.statement}</span> <span class=\"text-lg align-bottom ml-2\">🏅${admiralty}</span>`;
     keyList.appendChild(li);
   });
   if (!keyList.hasChildNodes()) {
@@ -607,5 +625,47 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     loadProject(currentProjectIdx >= 0 ? currentProjectIdx : 0);
   }
+
+  // Webpage fullscreen toggle for main panel
+  const fsBtn = document.getElementById('fullscreen-toggle');
+  const mainPanel = document.getElementById('main-panel-container');
+  const sidebar = document.querySelector('aside');
+  let closeBtn = null;
+  if (fsBtn && mainPanel) {
+    fsBtn.onclick = () => {
+      if (!mainPanel.classList.contains('fullscreen-mode')) {
+        mainPanel.classList.add('fullscreen-mode');
+        if (sidebar) sidebar.style.display = 'none';
+        fsBtn.style.display = 'none';
+        // Add close button
+        closeBtn = document.createElement('button');
+        closeBtn.className = 'fullscreen-close';
+        closeBtn.innerHTML = '&times;';
+        closeBtn.onclick = () => {
+          mainPanel.classList.remove('fullscreen-mode');
+          if (sidebar) sidebar.style.display = '';
+          if (closeBtn) closeBtn.remove();
+          fsBtn.style.display = '';
+        };
+        mainPanel.appendChild(closeBtn);
+      } else {
+        mainPanel.classList.remove('fullscreen-mode');
+        if (sidebar) sidebar.style.display = '';
+        if (closeBtn) closeBtn.remove();
+        fsBtn.style.display = '';
+      }
+    };
+  }
 });
+
+// Export for unit testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    calculateInconsistencyScores,
+    makeBlankProject,
+    ensureMatrixSize,
+    ensureEvidenceActiveSize,
+    CONSISTENCY_STATES
+  };
+}
 
