@@ -273,7 +273,7 @@ function renderACHMatrix() {
   hypotheses.forEach(hypo => {
     const th = document.createElement('th');
     th.className = 'sticky top-0 bg-white z-10 px-4 py-2 border-b font-bold text-[#1a2332] whitespace-normal break-words max-w-xs';
-    th.textContent = hypo.title;
+    th.innerHTML = hypo.title;
     headRow.appendChild(th);
   });
   thead.appendChild(headRow);
@@ -307,7 +307,7 @@ function renderACHMatrix() {
       const state = CONSISTENCY_STATES[stateIdx];
       td.className = `px-4 py-2 text-center border ${state.color} font-semibold transition-colors text-[#1a2332]`;
       td.title = state.tooltip;
-      td.textContent = state.label;
+      td.innerHTML = state.label;
       if (evidenceActive[rowIdx]) {
         td.classList.add('cursor-pointer');
         td.onclick = () => {
@@ -553,7 +553,7 @@ function renderProjectList() {
   projects.forEach((proj, idx) => {
     const li = document.createElement('li');
     li.className = `mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold text-lg select-none ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
-    li.textContent = proj.name;
+    li.innerHTML = proj.name;
     li.onclick = () => loadProject(idx);
     li.ondblclick = (e) => {
       e.stopPropagation();
@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add close button
         closeBtn = document.createElement('button');
         closeBtn.className = 'fullscreen-close';
-        closeBtn.innerHTML = '&times;';
+        closeBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
         closeBtn.onclick = () => {
           mainPanel.classList.remove('fullscreen-mode');
           if (sidebar) sidebar.style.display = '';
@@ -667,5 +667,19 @@ if (typeof module !== 'undefined' && module.exports) {
     ensureEvidenceActiveSize,
     CONSISTENCY_STATES
   };
+}
+
+// Add DOMPurify for sanitization
+// If running in browser, load from CDN if not present
+if (typeof window !== 'undefined' && typeof window.DOMPurify === 'undefined') {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js';
+  document.head.appendChild(script);
+}
+function sanitizeHTML(html) {
+  if (typeof window !== 'undefined' && window.DOMPurify) {
+    return window.DOMPurify.sanitize(html);
+  }
+  return html;
 }
 

@@ -6,6 +6,7 @@
   <title>ACH Digital Workbench</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
   <style>
     body { font-family: 'Inter', 'Lato', 'Segoe UI', Arial, sans-serif; }
     .fullscreen-mode {
@@ -94,23 +95,11 @@
     </div>
   </div>
   <script src="app.js"></script>
+  <script src="dropdown.js"></script>
   <footer class="w-full text-center py-6 mt-8 text-gray-400 text-sm bg-transparent">
     This project was created by
     <a href="https://kravensecurity.com/" target="_blank" rel="noopener" class="font-bold text-gray-400 hover:text-[#C6372F] underline transition-colors duration-200">Kraven Security</a>
     for all cyber threat intelligence coaching and consultation needs.
   </footer>
-  <script>
-    // Simple dropdown for ACH info
-    const achToggle = document.getElementById('ach-info-toggle');
-    const achContent = document.getElementById('ach-info-content');
-    const achCaret = document.getElementById('ach-info-caret');
-    if (achToggle && achContent && achCaret) {
-      achToggle.addEventListener('click', () => {
-        const isOpen = achContent.style.display === 'block';
-        achContent.style.display = isOpen ? 'none' : 'block';
-        achCaret.style.transform = isOpen ? '' : 'rotate(180deg)';
-      });
-    }
-  </script>
 </body>
 </html>
