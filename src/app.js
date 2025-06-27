@@ -385,20 +385,69 @@ function renderResultsDashboard() {
   // The max possible score is the number of active evidence rows
   const maxPossibleScore = evidenceActive.filter(Boolean).length || 1;
 
-  // Ranked List
-  const list = document.createElement('ol');
-  list.className = 'mb-4';
-  scored.forEach((hypo, idx) => {
+  // --- Most Likely Hypotheses ---
+  const minScore = scored.length > 0 ? scored[0].inconsistencyScore : null;
+  const mostLikely = scored.filter(h => h.inconsistencyScore === minScore);
+  const likelySection = document.createElement('div');
+  likelySection.className = 'mb-8 flex-1';
+  likelySection.innerHTML = `<h3 class="text-lg font-semibold mb-2 text-[#1a2332]">Most Likely Hypotheses</h3>`;
+  const likelyList = document.createElement('ol');
+  likelyList.className = 'mb-2';
+  mostLikely.forEach((hypo, idx) => {
     const li = document.createElement('li');
     li.className = 'flex items-center gap-4 mb-2';
     li.innerHTML = `
       <span class="w-6 text-right font-bold">${idx + 1}.</span>
-      <span class="flex-1">${hypo.title}</span>
-      <span class="text-xs text-gray-500">Inconsistency: ${hypo.inconsistencyScore}</span>
+      <span class="flex-1">${hypo.title} <span class="text-xs text-gray-500 ml-2">(Inconsistency: ${hypo.inconsistencyScore})</span></span>
     `;
-    list.appendChild(li);
+    likelyList.appendChild(li);
   });
-  container.appendChild(list);
+  likelySection.appendChild(likelyList);
+
+  // --- Key Pieces of Evidence ---
+  const keyEvidenceSection = document.createElement('div');
+  keyEvidenceSection.className = 'mb-4 flex-1';
+  keyEvidenceSection.innerHTML = `<h3 class="text-lg font-semibold mb-2 text-[#1a2332]">Key Pieces of Evidence</h3>`;
+  const keyList = document.createElement('ol');
+  keyList.className = 'mb-2 list-decimal pl-6';
+
+  // Collect and score key evidence
+  let keyEvidenceArr = [];
+  evidenceList.forEach((ev, rowIdx) => {
+    if (!evidenceActive[rowIdx]) return;
+    let count = 0;
+    for (let colIdx = 0; colIdx < hypotheses.length; ++colIdx) {
+      const stateIdx = matrixRatings[rowIdx]?.[colIdx] ?? 2;
+      const label = CONSISTENCY_STATES[stateIdx].label;
+      if (label === 'C' || label === 'CC' || label === 'I' || label === 'II') {
+        count++;
+      }
+    }
+    if (count > 0) {
+      keyEvidenceArr.push({ ev, count });
+    }
+  });
+  // Sort by count descending
+  keyEvidenceArr.sort((a, b) => b.count - a.count);
+  keyEvidenceArr.forEach(({ ev }) => {
+    const admiralty = `${ev.sourceReliability || ''}${ev.infoCredibility || ''}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="font-semibold">${ev.statement}</span> <span class="text-xs text-gray-500">(Admiralty: ${admiralty})</span>`;
+    keyList.appendChild(li);
+  });
+  if (!keyList.hasChildNodes()) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="text-gray-400">No key evidence identified.</span>';
+    keyList.appendChild(li);
+  }
+  keyEvidenceSection.appendChild(keyList);
+
+  // --- Two-column flex layout ---
+  const flexRow = document.createElement('div');
+  flexRow.className = 'flex flex-row gap-10';
+  flexRow.appendChild(likelySection);
+  flexRow.appendChild(keyEvidenceSection);
+  container.appendChild(flexRow);
 
   // Insert below ACH_Matrix
   const achMatrix = document.getElementById('ach-matrix');
@@ -557,3 +606,4 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProject(currentProjectIdx >= 0 ? currentProjectIdx : 0);
   }
 });
+
