@@ -1,0 +1,157 @@
+You are an expert AI programmer specializing in creating sophisticated, data-centric web applications with an intuitive and professional user experience. Your task is to build a complete, interactive, single-page web application for performing the Analysis of Competing Hypotheses (ACH).
+
+This application will be an analyst's "Digital Workbench"—a flexible, responsive, and integrated tool that actively guides users toward more rigorous and unbiased conclusions. It moves beyond a simple calculator to become a dynamic partner in the analytical process.
+
+Follow these detailed specifications for vision, architecture, and functionality.
+
+Part 1: Core Vision & Philosophy
+The entire design and user experience must be guided by these principles:
+
+Metaphor: "The Digital Workbench"
+
+The application must be a fluid, integrated workspace, not a rigid, step-by-step wizard.
+
+All core components (hypotheses, evidence, matrix) should be live and accessible within a single, cohesive view.
+
+Changes to any element (e.g., editing a hypothesis) must instantly and visibly update the entire analysis, reflecting the iterative nature of deep analytical thought.   
+
+Core Principle: "Refutation, Not Confirmation"
+
+The application's primary goal is to help the user disprove or refute hypotheses, not confirm a favored one. This is the core defense against confirmation bias.   
+
+Language: Use terminology that reinforces refutation. The primary metric must be labeled "Inconsistency Score," not "Likelihood Score." Use verbs like "challenge," "test," and "disprove" in tooltips and guides.
+
+Visual Emphasis: Visually prioritize information that challenges hypotheses. Evidence marked as inconsistent (- or --) must have greater visual prominence (e.g., a saturated red color) than consistent evidence (+ or ++). The goal is to make discovering contradictions a visually rewarding event.   
+
+Aesthetic: "Professional, Clean, and Trustworthy"
+
+Typography: Use a clean, highly legible sans-serif font like Inter or Lato.
+
+Color Palette: Use a muted, professional palette (grays, blues). Reserve color for status indicators and data visualization (e.g., red for inconsistency, green for consistency).
+
+Layout: Employ generous whitespace to avoid a cluttered feel and reduce cognitive load.   
+
+Part 2: Tech Stack & Global Architecture
+Tech Stack:
+
+Framework: React or Vue with TypeScript.
+
+Styling: Tailwind CSS for a modern, utility-first approach.
+
+Performance: All calculations and state management must be handled on the client-side for a fast, responsive, and lag-free experience.
+
+Global Layout: Three-Panel Responsive Design
+
+Left Panel (Navigation & Project Management): A collapsible sidebar listing saved analysis projects and a "New Analysis" button.
+
+Center Panel (The Workbench): The main workspace, occupying the largest screen area. It will contain the HypothesisCanvas, EvidenceLocker, ACH_Matrix, and ResultsDashboard.
+
+Right Panel (The Inspector): A context-sensitive panel that appears when an item (hypothesis, evidence, matrix cell) is selected. It provides detailed information and editing controls for the selected item.
+
+Part 3: Component Specifications
+Build the application around these high-level, reusable components:
+
+1. HypothesisCanvas Component
+Functionality: An interface for adding, editing, and deleting hypotheses. Each hypothesis should be a distinct card or editable list item. Changes here must instantly update the columns in the ACH_Matrix.
+
+Key Feature - Mutual Exclusivity Helper: When adding/editing a hypothesis, show a non-intrusive tooltip that asks a guiding question like: "If this hypothesis were true, would all other hypotheses necessarily be false?" This nudges the user toward creating a logically sound hypothesis set.   
+
+Data Model (for each hypothesis object):
+
+id: string (unique identifier)
+
+title: string (short title for matrix header)
+
+description: string (longer, optional details for the Inspector)
+
+color: string (user-selectable color tag)
+
+inconsistencyScore: number (calculated value)
+
+2. EvidenceLocker Component
+Functionality: A centralized area to manage all evidence items. Adding evidence should open a structured form (in a modal or the Inspector).
+
+Key Feature - Structured Evidence: Treat each piece of evidence as a rich data object, not just text. This forces the analyst to consider its quality and makes the analysis more rigorous and auditable.   
+
+Data Model (for each evidence object):
+
+id: string (unique identifier)
+
+statement: string (the core text of the evidence)
+
+source: string (URL, report name, etc.)
+
+credibility: number (1-5 rating, visualized as stars)
+
+relevance: number (1-5 rating, visualized as stars)
+
+isAbsenceOfEvidence: boolean (checkbox to mark evidence that is expected but not found )   
+
+diagnosticityScore: number (calculated value)
+
+3. ACH_Matrix Component (The Interactive Heart)
+Structure: A dynamic grid. Columns are hypotheses, rows are evidence.
+
+Crucial Usability Feature: Row and column headers must be frozen/sticky so they remain visible when scrolling through large matrices.   
+
+Interaction:
+
+Clicking a cell at the intersection of an evidence row and hypothesis column should intuitively cycle through consistency ratings.
+
+The cell's appearance (color, icon, text) must update instantly.
+
+Feature - Configurable Rating System: Allow the user to select a rating system for the project:
+
+Simple: Consistent (C), Inconsistent (I), Not Applicable (N/A)
+
+Weighted: Very Consistent (++), Consistent (+) , N/A, Inconsistent (-), Very Inconsistent (--).   
+
+Automated Real-Time Calculations:
+
+Weighted Inconsistency Score (per hypothesis): Continuously calculate this for each column. Offer an advanced scoring option that incorporates evidence quality. The formula is: Score 
+H
+​
+ =∑ 
+i∈E
+​
+ (W 
+inconsistency,i
+​
+ ×W 
+credibility,i
+​
+ ×W 
+relevance,i
+​
+ ).   
+
+Diagnosticity Score (per evidence): For each row, calculate a score that quantifies how well that evidence discriminates between hypotheses (e.g., count the number of I ratings in the row).   
+
+Feature - Sorting & Filtering: Allow the user to sort evidence rows by Credibility, Relevance, or the calculated Diagnosticity Score.
+
+4. ResultsDashboard Component
+Display: Positioned directly below the ACH_Matrix, this component must update in real-time.
+
+Ranked List of Hypotheses: The primary feature is a list of all hypotheses, automatically sorted by the lowest Inconsistency Score (most plausible) to the highest.
+
+Visualization: Include a simple, clean horizontal bar chart. Each bar represents a hypothesis, and its length is proportional to its Inconsistency Score. The shortest bar represents the most likely hypothesis.
+
+Feature - Analyst Confidence: Include a summary table with the final rankings that has an editable field for "Analyst Confidence (%)". This acknowledges that the tool aids, not replaces, human judgment.   
+
+Part 4: Advanced Capabilities
+Sensitivity Analysis:
+
+Functionality: On each evidence row in the matrix, include a toggle switch or an "eye" icon to temporarily "deactivate" that evidence.
+
+Effect: When toggled, the evidence is visually grayed out, and all scores and the ResultsDashboard instantly recalculate. This allows the user to interactively test the stability of their conclusion.   
+
+Audit Trail and Reporting:
+
+Functionality: An "Export Report" button that generates a professional, auditable document (PDF or Markdown).
+
+Report Content: The report must be a complete record of the analysis, including: Project Title, List of Hypotheses (with descriptions), Evidence Locker Summary (with all metadata), a static image/table of the Final Matrix, the Final Results Summary table, a text area for the Analyst's Qualitative Conclusion, and a section for "Milestones for Future Observation".   
+
+Part 5: User Experience & Onboarding
+Embedded Education: The tool must teach the methodology. Use detailed tooltips on hover for nearly every element (e.g., hovering the "Diagnosticity" score explains what it is). Use small info icons (<i>) next to key concepts to open explanatory pop-ups.   
+
+Onboarding Experience: To lower the barrier to entry, give the user an option to load a pre-populated example analysis (e.g., the classic "Where are my keys?" problem ). This allows them to immediately see a completed project and interact with all features.   

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACH Digital Workbench</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', 'Lato', 'Segoe UI', Arial, sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f6f8fa] font-sans min-h-screen">
+  <div id="app" class="flex h-screen">
+    <!-- Left Panel: Navigation & Project Management -->
+    <aside class="w-64 bg-[#374151] border-r border-gray-200 flex flex-col p-6 text-white gap-6">
+      <h2 class="text-lg font-bold mb-6 tracking-wide">Projects</h2>
+      <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">New Analysis</button>
+      <ul id="project-list" class="flex-1 overflow-y-auto space-y-2">
+        <!-- Project items will go here -->
+      </ul>
+      <!-- Clear Project button will be inserted here by JS -->
+    </aside>
+    <!-- Center Panel: Workbench -->
+    <main class="flex-1 flex flex-col p-10 overflow-y-auto bg-white shadow-xl rounded-l-3xl">
+      <h1 class="text-3xl font-bold mb-10 text-[#1a2332] tracking-tight">ACH Digital Workbench</h1>
+      <div id="workbench" class="flex flex-col gap-10">
+        <!-- HypothesisCanvas, EvidenceLocker, ACH_Matrix, ResultsDashboard will be rendered here -->
+      </div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
