@@ -59,6 +59,20 @@
           <img src="media/kraven-security-logo.jpg" alt="Kraven Security Logo" class="w-14 h-14 rounded-2xl shadow-lg object-contain bg-black" />
         </a>
       </div>
+      <div class="mb-8">
+        <div id="ach-info-dropdown" class="bg-blue-100 border-l-4 border-blue-400 rounded-xl shadow-sm">
+          <button id="ach-info-toggle" class="w-full flex items-center gap-3 p-4 text-blue-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-t-xl transition">
+            <span class="text-blue-500 text-2xl flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="bi bi-info-circle"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg>
+            </span>
+            <span class="flex-1 text-left">What is ACH?</span>
+            <svg id="ach-info-caret" class="w-5 h-5 text-blue-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="ach-info-content" class="px-5 pb-4 pt-1 text-blue-900 text-sm" style="display: none;">
+            <div class="mb-1">The <strong>Analysis of Competing Hypotheses (ACH)</strong> is a structured technique for evaluating multiple explanations using evidence and logic. <a href="https://kravensecurity.com/analysis-of-competing-hypotheses/" target="_blank" rel="noopener" class="hover:text-[#C6372F] underline transition-colors duration-200">Learn the 7-step process and see practical examples in this guide.</a></div>
+          </div>
+        </div>
+      </div>
       <h2 class="text-2xl font-extrabold mb-8 tracking-wide">Projects</h2>
       <button class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg">New Analysis</button>
       <ul id="project-list" class="flex-1 overflow-y-auto space-y-2">
@@ -85,5 +99,18 @@
     <a href="https://kravensecurity.com/" target="_blank" rel="noopener" class="font-bold text-gray-400 hover:text-[#C6372F] underline transition-colors duration-200">Kraven Security</a>
     for all cyber threat intelligence coaching and consultation needs.
   </footer>
+  <script>
+    // Simple dropdown for ACH info
+    const achToggle = document.getElementById('ach-info-toggle');
+    const achContent = document.getElementById('ach-info-content');
+    const achCaret = document.getElementById('ach-info-caret');
+    if (achToggle && achContent && achCaret) {
+      achToggle.addEventListener('click', () => {
+        const isOpen = achContent.style.display === 'block';
+        achContent.style.display = isOpen ? 'none' : 'block';
+        achCaret.style.transform = isOpen ? '' : 'rotate(180deg)';
+      });
+    }
+  </script>
 </body>
 </html>
