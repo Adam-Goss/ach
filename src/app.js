@@ -206,11 +206,11 @@ function renderEvidenceLocker() {
 
 // --- ACH_Matrix Component ---
 const CONSISTENCY_STATES = [
-  { label: 'CC', color: 'bg-green-300 text-green-900', tooltip: 'Very Consistent', value: -2 },
-  { label: 'C', color: 'bg-green-100 text-green-700', tooltip: 'Consistent', value: -1 },
-  { label: 'N/A', color: 'bg-gray-100 text-gray-700', tooltip: 'Not Applicable', value: 0 },
-  { label: 'I', color: 'bg-red-100 text-red-700', tooltip: 'Inconsistent', value: 1 },
-  { label: 'II', color: 'bg-red-400 text-red-900', tooltip: 'Very Inconsistent', value: 2 }
+  { label: 'CC', color: 'bg-emerald-500 text-white', tooltip: 'Very Consistent', value: -2, description: 'Evidence strongly supports this hypothesis' },
+  { label: 'C', color: 'bg-green-400 text-white', tooltip: 'Consistent', value: -1, description: 'Evidence supports this hypothesis' },
+  { label: 'N/A', color: 'bg-gray-200 text-gray-700', tooltip: 'Not Applicable', value: 0, description: 'Evidence is not relevant to this hypothesis' },
+  { label: 'I', color: 'bg-orange-400 text-white', tooltip: 'Inconsistent', value: 1, description: 'Evidence contradicts this hypothesis' },
+  { label: 'II', color: 'bg-red-500 text-white', tooltip: 'Very Inconsistent', value: 2, description: 'Evidence strongly contradicts this hypothesis' }
 ];
 
 // Matrix state: evidenceList.length x hypotheses.length
@@ -254,70 +254,171 @@ function renderACHMatrix() {
   container.id = 'ach-matrix';
   container.className = 'mb-10';
 
-  // Header
+  // Header with legend
   const header = document.createElement('div');
-  header.className = 'flex items-center justify-between mb-4';
-  header.innerHTML = `<h2 class=\"text-xl font-bold text-[#1a2332] tracking-wide\">🗂️ ACH Matrix</h2>`;
+  header.className = 'mb-6';
+  header.innerHTML = `
+    <div class="flex items-center justify-between mb-4 ach-matrix-header">
+      <h2 class="text-2xl font-bold text-[#1a2332] tracking-wide flex items-center gap-3">
+        <span class="text-3xl">🗂️</span>
+        ACH Matrix
+        <span class="text-sm font-normal text-gray-500 ml-2">(Click cells or press Enter/Space to cycle through ratings)</span>
+      </h2>
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600">Active Evidence:</span>
+        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+          ${evidenceActive.filter(Boolean).length}/${evidenceList.length}
+        </span>
+      </div>
+    </div>
+    
+    <!-- Legend -->
+    <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-700 mb-3">Consistency Ratings:</h3>
+      <div class="flex flex-wrap gap-3 ach-matrix-legend">
+        ${CONSISTENCY_STATES.map(state => `
+          <div class="flex items-center gap-2 group relative">
+            <div class="w-8 h-8 ${state.color} rounded-lg flex items-center justify-center font-bold text-sm shadow-sm">
+              ${state.label}
+            </div>
+            <span class="text-sm text-gray-600">${state.tooltip}</span>
+            <div class="absolute bottom-full left-0 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
+              ${state.description}
+              <div class="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
   container.appendChild(header);
 
-  // Table
-  const tableWrap = document.createElement('div');
-  tableWrap.className = 'overflow-auto max-w-full';
-  const table = document.createElement('table');
-  table.className = 'min-w-max border-collapse bg-white rounded-xl shadow';
+  // Matrix container with better styling
+  const matrixContainer = document.createElement('div');
+  matrixContainer.className = 'bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden';
 
-  // Table Head
+  // Table wrapper with improved scrolling and responsive design
+  const tableWrap = document.createElement('div');
+  tableWrap.className = 'overflow-auto max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100';
+  const table = document.createElement('table');
+  table.className = 'w-full border-collapse';
+  table.setAttribute('role', 'grid');
+  table.setAttribute('aria-label', 'ACH Matrix - Evidence vs Hypotheses Consistency Ratings');
+
+  // Table Head with improved styling
   const thead = document.createElement('thead');
+  thead.className = 'bg-gradient-to-r from-gray-50 to-gray-100';
   const headRow = document.createElement('tr');
-  headRow.appendChild(document.createElement('th')); // Empty corner
-  hypotheses.forEach(hypo => {
+
+  // Empty corner cell
+  const cornerTh = document.createElement('th');
+  cornerTh.className = 'sticky top-0 left-0 bg-gradient-to-br from-gray-50 to-gray-100 z-20 px-4 py-4 border-b-2 border-r-2 border-gray-300 min-w-[200px]';
+  cornerTh.innerHTML = `
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-gray-700">Evidence</span>
+      <div class="flex items-center gap-1">
+        <span class="text-xs text-gray-500">Toggle</span>
+        <span class="text-xs">👁️</span>
+      </div>
+    </div>
+  `;
+  headRow.appendChild(cornerTh);
+
+  // Hypothesis headers
+  hypotheses.forEach((hypo, idx) => {
     const th = document.createElement('th');
-    th.className = 'sticky top-0 bg-white z-10 px-4 py-2 border-b font-bold text-[#1a2332] whitespace-normal break-words max-w-xs';
-    th.innerHTML = hypo.title;
+    th.className = 'sticky top-0 bg-gradient-to-b from-gray-50 to-gray-100 z-10 px-4 py-4 border-b-2 border-gray-300 font-bold text-[#1a2332] whitespace-normal break-words max-w-xs text-center';
+    th.innerHTML = `
+      <div class="flex flex-col items-center gap-1">
+        <span class="text-sm font-semibold">H${idx + 1}</span>
+        <span class="text-xs text-gray-600 leading-tight">${hypo.title}</span>
+      </div>
+    `;
     headRow.appendChild(th);
   });
   thead.appendChild(headRow);
   table.appendChild(thead);
 
-  // Table Body
+  // Table Body with enhanced styling
   const tbody = document.createElement('tbody');
   evidenceList.forEach((ev, rowIdx) => {
     const tr = document.createElement('tr');
-    tr.className = evidenceActive[rowIdx] ? '' : 'opacity-40 bg-gray-100';
-    // Evidence label (sticky) + eye icon
+    tr.className = evidenceActive[rowIdx] ? 'hover:bg-gray-50 transition-colors duration-150' : 'opacity-50 bg-gray-100';
+
+    // Evidence label with improved toggle
     const evTh = document.createElement('th');
-    evTh.className = 'sticky left-0 bg-white z-10 px-2 py-2 border-r text-sm max-w-xs w-48 text-left flex items-center gap-2 text-[#1a2332]';
+    evTh.className = 'sticky left-0 bg-white z-10 px-4 py-3 border-r-2 border-gray-200 text-left min-w-[200px]';
     evTh.innerHTML = `
-      <button title="Toggle evidence" class="focus:outline-none" style="font-size:1.1em;">
-        <span>${evidenceActive[rowIdx] ? '👁️' : '🚫'}</span>
-      </button>
-      <span>${ev.statement || `Evidence ${rowIdx+1}`}</span>
+      <div class="flex items-center gap-3">
+        <button 
+          title="${evidenceActive[rowIdx] ? 'Deactivate evidence' : 'Activate evidence'}" 
+          class="flex-shrink-0 w-8 h-8 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 ${evidenceActive[rowIdx]
+        ? 'border-green-500 bg-green-50 text-green-700 hover:bg-green-100'
+        : 'border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100'
+      }"
+        >
+          <span class="text-sm">${evidenceActive[rowIdx] ? '👁️' : '🚫'}</span>
+        </button>
+        <div class="flex-1 min-w-0">
+          <div class="font-medium text-sm text-gray-900 truncate" title="${ev.statement || `Evidence ${rowIdx + 1}`}">
+            ${ev.statement || `Evidence ${rowIdx + 1}`}
+          </div>
+          ${ev.source ? `<div class="text-xs text-gray-500 truncate" title="${ev.source}">${ev.source}</div>` : ''}
+        </div>
+      </div>
     `;
-    // Eye icon toggle
-    evTh.querySelector('button').onclick = () => {
+
+    // Enhanced toggle button
+    const toggleBtn = evTh.querySelector('button');
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
       evidenceActive[rowIdx] = !evidenceActive[rowIdx];
       renderACHMatrix();
       renderResultsDashboard();
+      saveCurrentProject();
     };
     tr.appendChild(evTh);
-    // Matrix cells
+
+    // Matrix cells with improved styling
     hypotheses.forEach((hypo, colIdx) => {
       const td = document.createElement('td');
       const stateIdx = matrixRatings[rowIdx]?.[colIdx] ?? 2; // Default to N/A
       const state = CONSISTENCY_STATES[stateIdx];
-      td.className = `px-4 py-2 text-center border ${state.color} font-semibold transition-colors text-[#1a2332]`;
-      td.title = state.tooltip;
-      td.innerHTML = state.label;
+
+      td.className = `px-4 py-3 text-center border border-gray-200 transition-all duration-200 ${evidenceActive[rowIdx]
+        ? `${state.color} font-bold text-sm cursor-pointer hover:scale-105 hover:shadow-md transform focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2`
+        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+        }`;
+
+      td.title = evidenceActive[rowIdx] ? `${state.tooltip}: ${state.description}` : 'Evidence is deactivated';
+      td.setAttribute('role', 'gridcell');
+      td.setAttribute('tabindex', evidenceActive[rowIdx] ? '0' : '-1');
+      td.setAttribute('aria-label', evidenceActive[rowIdx] ? `Cell ${rowIdx + 1}-${colIdx + 1}: ${state.tooltip}` : 'Cell disabled');
+      td.innerHTML = `
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-lg font-bold">${state.label}</span>
+          <span class="text-xs opacity-75">${state.tooltip}</span>
+        </div>
+      `;
+
       if (evidenceActive[rowIdx]) {
-        td.classList.add('cursor-pointer');
-        td.onclick = () => {
+        const handleCellAction = () => {
           matrixRatings[rowIdx][colIdx] = (stateIdx + 1) % CONSISTENCY_STATES.length;
           renderACHMatrix();
           renderResultsDashboard();
+          saveCurrentProject();
+        };
+
+        td.onclick = handleCellAction;
+        td.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCellAction();
+          }
         };
       } else {
-        td.classList.remove('cursor-pointer');
         td.onclick = null;
+        td.onkeydown = null;
       }
       tr.appendChild(td);
     });
@@ -325,24 +426,55 @@ function renderACHMatrix() {
   });
   table.appendChild(tbody);
   tableWrap.appendChild(table);
-  container.appendChild(tableWrap);
+  matrixContainer.appendChild(tableWrap);
+  container.appendChild(matrixContainer);
 
-  // Reset Matrix Button (moved below the table)
-  const resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reset Matrix';
-  resetBtn.className = 'mt-6 px-4 py-2 bg-gray-200 text-[#C6372F] rounded hover:bg-gray-300 transition font-semibold';
+  // Action buttons with improved styling
+  const actionBar = document.createElement('div');
+  actionBar.className = 'flex items-center justify-between mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200 ach-matrix-action-bar';
 
+  actionBar.innerHTML = `
+    <div class="flex items-center gap-3">
+      <button 
+        id="reset-matrix-btn"
+        class="px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors duration-200 font-semibold text-sm border border-red-200 hover:border-red-300"
+      >
+        🔄 Reset Matrix
+      </button>
+      <button 
+        id="toggle-all-evidence-btn"
+        class="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors duration-200 font-semibold text-sm border border-blue-200 hover:border-blue-300"
+      >
+        ${evidenceActive.every(Boolean) ? '🚫' : '👁️'} ${evidenceActive.every(Boolean) ? 'Deactivate All' : 'Activate All'}
+      </button>
+    </div>
+  `;
+
+  // Enhanced button event handlers
+  const resetBtn = actionBar.querySelector('#reset-matrix-btn');
   resetBtn.onclick = () => {
-    for (let i = 0; i < matrixRatings.length; ++i) {
-      for (let j = 0; j < matrixRatings[i].length; ++j) {
-        matrixRatings[i][j] = 2; // N/A
+    if (confirm('Are you sure you want to reset all matrix ratings to "Not Applicable"?')) {
+      for (let i = 0; i < matrixRatings.length; ++i) {
+        for (let j = 0; j < matrixRatings[i].length; ++j) {
+          matrixRatings[i][j] = 2; // N/A
+        }
       }
+      renderACHMatrix();
+      renderResultsDashboard();
+      saveCurrentProject();
     }
+  };
+
+  const toggleAllBtn = actionBar.querySelector('#toggle-all-evidence-btn');
+  toggleAllBtn.onclick = () => {
+    const allActive = evidenceActive.every(Boolean);
+    evidenceActive.fill(!allActive);
     renderACHMatrix();
     renderResultsDashboard();
     saveCurrentProject();
   };
-  container.appendChild(resetBtn);
+
+  container.appendChild(actionBar);
 
   // Insert below EvidenceLocker
   const evidenceLocker = document.getElementById('evidence-locker');
@@ -355,12 +487,12 @@ function renderACHMatrix() {
 
 // Patch renders to update matrix
 const _oldRenderHypothesisCanvas = renderHypothesisCanvas;
-renderHypothesisCanvas = function() {
+renderHypothesisCanvas = function () {
   _oldRenderHypothesisCanvas();
   renderACHMatrix();
 };
 const _oldRenderEvidenceLocker = renderEvidenceLocker;
-renderEvidenceLocker = function() {
+renderEvidenceLocker = function () {
   ensureEvidenceActiveSize();
   _oldRenderEvidenceLocker();
   renderACHMatrix();
@@ -480,7 +612,7 @@ function renderResultsDashboard() {
 
 // Patch renders to update dashboard
 const _oldRenderACHMatrix = renderACHMatrix;
-renderACHMatrix = function() {
+renderACHMatrix = function () {
   _oldRenderACHMatrix();
   renderResultsDashboard();
 };
@@ -515,7 +647,7 @@ function loadProjectsFromStorage() {
         projects = parsed.projects;
         currentProjectIdx = typeof parsed.currentProjectIdx === 'number' ? parsed.currentProjectIdx : 0;
       }
-    } catch {}
+    } catch { }
   }
 }
 
@@ -552,11 +684,32 @@ function renderProjectList() {
   list.innerHTML = '';
   projects.forEach((proj, idx) => {
     const li = document.createElement('li');
-    li.className = `mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold text-lg select-none ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
-    li.innerHTML = proj.name;
-    li.onclick = () => loadProject(idx);
+    li.className = `mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold select-none group relative ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
+
+    li.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="flex-1">${proj.name}</span>
+        <button 
+          class="delete-project-btn opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2 px-2 py-1 text-red-400 hover:text-red-200 hover:bg-red-900/20 rounded-lg text-sm"
+          title="Delete project"
+          data-project-idx="${idx}"
+        >
+          🗑️
+        </button>
+      </div>
+    `;
+
+    // Project click handler
+    li.onclick = (e) => {
+      // Don't trigger if clicking delete button
+      if (e.target.classList.contains('delete-project-btn')) return;
+      loadProject(idx);
+    };
+
+    // Double click to rename
     li.ondblclick = (e) => {
       e.stopPropagation();
+      if (e.target.classList.contains('delete-project-btn')) return;
       const newName = prompt('Rename project:', proj.name);
       if (newName && newName.trim()) {
         proj.name = newName.trim();
@@ -564,14 +717,50 @@ function renderProjectList() {
         saveProjectsToStorage();
       }
     };
+
+    // Delete button handler
+    const deleteBtn = li.querySelector('.delete-project-btn');
+    deleteBtn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      if (projects.length <= 1) {
+        alert('Cannot delete the last project. Please create a new project first.');
+        return;
+      }
+
+      const projectName = proj.name;
+      if (confirm(`Are you sure you want to delete "${projectName}"? This action cannot be undone.`)) {
+        // Remove the project
+        projects.splice(idx, 1);
+
+        // Adjust current project index if needed
+        if (currentProjectIdx >= idx) {
+          currentProjectIdx = Math.max(0, currentProjectIdx - 1);
+        }
+
+        // Load the current project (or first project if none selected)
+        if (currentProjectIdx >= 0 && currentProjectIdx < projects.length) {
+          loadProject(currentProjectIdx);
+        } else if (projects.length > 0) {
+          loadProject(0);
+        } else {
+          // Create a new project if all were deleted
+          projects.push(makeBlankProject('Untitled Project 1'));
+          loadProject(0);
+        }
+
+        saveProjectsToStorage();
+        renderProjectList();
+      }
+    };
+
     list.appendChild(li);
   });
 }
 
 function setupNewAnalysisButton() {
-  let newAnalysisBtn = Array.from(document.querySelectorAll('button')).find(
-    btn => btn.textContent && btn.textContent.trim() === 'New Analysis'
-  );
+  let newAnalysisBtn = document.getElementById('new-analysis-btn');
   if (newAnalysisBtn) {
     newAnalysisBtn.onclick = () => {
       saveCurrentProject();
@@ -582,6 +771,8 @@ function setupNewAnalysisButton() {
       loadProject(projects.length - 1);
       saveProjectsToStorage();
     };
+  } else {
+    console.warn('New Analysis button not found');
   }
 }
 

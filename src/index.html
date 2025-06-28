@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ACH Digital Workbench</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
   <style>
-    body { font-family: 'Inter', 'Lato', 'Segoe UI', Arial, sans-serif; }
+    body {
+      font-family: 'Inter', 'Lato', 'Segoe UI', Arial, sans-serif;
+    }
+
     .fullscreen-mode {
       position: fixed !important;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       width: 100vw !important;
       height: 100vh !important;
       z-index: 50;
-      background: rgba(24,24,24,0.98);
+      background: rgba(24, 24, 24, 0.98);
       border-radius: 0 !important;
       box-shadow: none !important;
       padding: 0 !important;
@@ -23,6 +31,7 @@
       display: flex !important;
       flex-direction: column;
     }
+
     .fullscreen-mode main {
       border-radius: 0 !important;
       box-shadow: none !important;
@@ -30,6 +39,7 @@
       min-height: 0 !important;
       padding-top: 3rem !important;
     }
+
     .fullscreen-close {
       position: absolute;
       top: 2rem;
@@ -41,41 +51,60 @@
       padding: 0.5rem 1rem;
       font-size: 1.5rem;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       border: none;
       transition: background 0.2s;
     }
+
     .fullscreen-close:hover {
       background: #a82a25;
     }
   </style>
 </head>
+
 <body class="bg-gradient-to-br from-[#181818] via-[#23272a] to-[#23272a] font-sans min-h-screen">
   <div id="app" class="flex h-screen gap-10 p-8">
     <!-- Left Panel: Navigation & Project Management -->
-    <aside class="w-80 bg-gradient-to-br from-[#23272a] to-[#374151] rounded-3xl shadow-2xl flex flex-col p-10 text-white gap-10 h-full relative overflow-hidden">
+    <aside
+      class="w-80 bg-gradient-to-br from-[#23272a] to-[#374151] rounded-3xl shadow-2xl flex flex-col p-10 text-white gap-10 h-full relative overflow-hidden">
       <!-- Logo Placeholder -->
-      <div class="flex items-center justify-center mb-4">
+      <div class="flex items-center justify-center mb-2">
         <a href="https://kravensecurity.com/" target="_blank" rel="noopener">
-          <img src="media/kraven-security-logo.jpg" alt="Kraven Security Logo" class="w-14 h-14 rounded-2xl shadow-lg object-contain bg-black" />
+          <img src="media/kraven-security-logo.jpg" alt="Kraven Security Logo"
+            class="w-14 h-14 rounded-2xl shadow-lg object-contain bg-black" />
         </a>
       </div>
-      <div class="mb-8">
+      <div class="mb-2">
         <div id="ach-info-dropdown" class="bg-blue-100 border-l-4 border-blue-400 rounded-xl shadow-sm">
-          <button id="ach-info-toggle" class="w-full flex items-center gap-3 p-4 text-blue-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-t-xl transition">
-            <span class="text-blue-500 text-2xl flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="bi bi-info-circle"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg>
+          <button id="ach-info-toggle"
+            class="w-full flex items-center gap-3 p-4 text-blue-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-t-xl transition">
+            <span class="text-blue-500 text-l flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"
+                class="bi bi-info-circle">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+              </svg>
             </span>
             <span class="flex-1 text-left">What is ACH?</span>
-            <svg id="ach-info-caret" class="w-5 h-5 text-blue-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg id="ach-info-caret" class="w-5 h-5 text-blue-500 transition-transform" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
           <div id="ach-info-content" class="px-5 pb-4 pt-1 text-blue-900 text-sm" style="display: none;">
-            <div class="mb-1">The <strong>Analysis of Competing Hypotheses (ACH)</strong> is a structured technique for evaluating multiple explanations using evidence and logic. <a href="https://kravensecurity.com/analysis-of-competing-hypotheses/" target="_blank" rel="noopener" class="hover:text-[#C6372F] underline transition-colors duration-200">Learn the 7-step process and see practical examples in this guide.</a></div>
+            <div class="mb-1">The <strong>Analysis of Competing Hypotheses (ACH)</strong> is a structured technique for
+              evaluating multiple explanations using evidence and logic. <a
+                href="https://kravensecurity.com/analysis-of-competing-hypotheses/" target="_blank" rel="noopener"
+                class="hover:text-[#C6372F] underline transition-colors duration-200">Learn the 7-step process and see
+                practical examples in this guide.</a></div>
           </div>
         </div>
       </div>
-      <h2 class="text-2xl font-extrabold mb-8 tracking-wide">Projects</h2>
-      <button class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg">New Analysis</button>
+      <h2 class="text-xl tracking-wide">Projects</h2>
+      <button id="new-analysis-btn"
+        class="px-3 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg">New
+        Analysis</button>
       <ul id="project-list" class="flex-1 overflow-y-auto space-y-2">
         <!-- Project items will go here -->
       </ul>
@@ -83,10 +112,12 @@
     </aside>
     <!-- Center Panel: Workbench -->
     <div id="main-panel-container" class="flex-1 flex flex-col relative">
-      <main class="flex-1 flex flex-col p-14 overflow-y-auto bg-white/80 shadow-2xl rounded-3xl backdrop-blur-md border border-white/30">
+      <main
+        class="flex-1 flex flex-col p-14 overflow-y-auto bg-white/80 shadow-2xl rounded-3xl backdrop-blur-md border border-white/30">
         <div class="flex items-center justify-between mb-14">
           <h1 class="text-5xl font-extrabold text-[#1a2332] tracking-tight drop-shadow-lg">ACH Digital Workbench</h1>
-          <button id="fullscreen-toggle" aria-label="Toggle Fullscreen" class="ml-4 px-3 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-xl shadow transition-all">⛶</button>
+          <button id="fullscreen-toggle" aria-label="Toggle Fullscreen"
+            class="ml-4 px-3 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-xl shadow transition-all">⛶</button>
         </div>
         <div id="workbench" class="flex flex-col gap-14">
           <!-- HypothesisCanvas, EvidenceLocker, ACH_Matrix, ResultsDashboard will be rendered here -->
@@ -98,8 +129,10 @@
   <script src="dropdown.js"></script>
   <footer class="w-full text-center py-6 mt-8 text-gray-400 text-sm bg-transparent">
     This project was created by
-    <a href="https://kravensecurity.com/" target="_blank" rel="noopener" class="font-bold text-gray-400 hover:text-[#C6372F] underline transition-colors duration-200">Kraven Security</a>
+    <a href="https://kravensecurity.com/" target="_blank" rel="noopener"
+      class="font-bold text-gray-400 hover:text-[#C6372F] underline transition-colors duration-200">Kraven Security</a>
     for all cyber threat intelligence coaching and consultation needs.
   </footer>
 </body>
+
 </html>
