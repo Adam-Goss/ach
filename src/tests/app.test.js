@@ -4,7 +4,7 @@ const {
   ensureMatrixSize,
   ensureEvidenceActiveSize,
   CONSISTENCY_STATES
-} = require('./logic');
+} = require('../js/logic');
 
 describe('makeBlankProject', () => {
   it('creates a blank project with the given name', () => {

@@ -1,28 +1,45 @@
 {
-  "name": "ach",
+  "name": "ach-digital-workbench",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A modern web application for Analysis of Competing Hypotheses (ACH) methodology, designed for intelligence analysis and decision-making",
+  "main": "src/js/app.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000",
+    "build": "echo 'No build step required - static files only'",
+    "deploy": "echo 'Deployment handled by GitHub Actions'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Adam-Goss/ach.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ach",
+    "analysis-of-competing-hypotheses",
+    "intelligence-analysis",
+    "decision-making",
+    "cyber-threat-intelligence",
+    "web-application",
+    "javascript",
+    "tailwind-css"
+  ],
+  "author": "Kraven Security",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Adam-Goss/ach/issues"
   },
-  "homepage": "https://github.com/Adam-Goss/ach#readme",
+  "homepage": "https://adam-goss.github.io/ach/",
   "devDependencies": {
     "@babel/core": "^7.27.7",
     "@babel/preset-env": "^7.27.2",
     "@babel/register": "^7.27.1",
     "jest": "^30.0.3",
     "jsdom": "^26.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

@@ -22,8 +22,9 @@ jobs:
     - name: Copy files for deployment
       run: |
         cp src/index.html .
-        cp src/app.js .
-        cp src/dropdown.js .
+        cp src/js/app.js .
+        cp src/js/dropdown.js .
+        cp src/css/style.css .
         cp -r src/media .
         
     - name: Deploy to GitHub Pages
