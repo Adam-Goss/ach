@@ -684,37 +684,75 @@ function renderProjectList() {
   list.innerHTML = '';
   projects.forEach((proj, idx) => {
     const li = document.createElement('li');
-    li.className = `mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold select-none group relative ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
+    li.className = `project-item mb-2 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 font-semibold select-none group relative ${idx === currentProjectIdx ? 'bg-[#C6372F] text-white shadow-lg' : 'bg-[#23272a] text-gray-200 hover:bg-[#374151] hover:text-white hover:shadow-md'}`;
 
     li.innerHTML = `
-      <div class="flex items-center justify-between">
-        <span class="flex-1">${proj.name}</span>
-        <button 
-          class="delete-project-btn opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2 px-2 py-1 text-red-400 hover:text-red-200 hover:bg-red-900/20 rounded-lg text-sm"
-          title="Delete project"
-          data-project-idx="${idx}"
-        >
-          🗑️
-        </button>
+      <div class="flex flex-col">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex-1 font-semibold">${proj.name}</span>
+        </div>
+        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
+          <button 
+            class="reset-project-btn px-2 py-1 text-orange-400 hover:text-orange-200 hover:bg-orange-900/30 rounded-lg text-xs font-medium transition-all duration-200 hover:scale-105 hover:shadow-md border border-orange-500/20 hover:border-orange-400/40 flex-1"
+            title="Reset this project - Clear all hypotheses, evidence, and matrix data while keeping the project"
+            data-project-idx="${idx}"
+          >
+            <span class="flex items-center justify-center gap-1">
+              <span class="text-sm">🔄</span>
+              <span class="text-xs">Reset</span>
+            </span>
+          </button>
+          <button 
+            class="delete-project-btn px-2 py-1 text-red-400 hover:text-red-200 hover:bg-red-900/30 rounded-lg text-xs font-medium transition-all duration-200 hover:scale-105 hover:shadow-md border border-red-500/20 hover:border-red-400/40 flex-1"
+            title="Delete this project - Permanently remove the project and all its data"
+            data-project-idx="${idx}"
+          >
+            <span class="flex items-center justify-center gap-1">
+              <span class="text-sm">🗑️</span>
+              <span class="text-xs">Delete</span>
+            </span>
+          </button>
+        </div>
       </div>
     `;
 
     // Project click handler
     li.onclick = (e) => {
-      // Don't trigger if clicking delete button
-      if (e.target.classList.contains('delete-project-btn')) return;
+      // Don't trigger if clicking action buttons
+      if (e.target.classList.contains('delete-project-btn') || e.target.classList.contains('reset-project-btn')) return;
       loadProject(idx);
     };
 
     // Double click to rename
     li.ondblclick = (e) => {
       e.stopPropagation();
-      if (e.target.classList.contains('delete-project-btn')) return;
+      if (e.target.classList.contains('delete-project-btn') || e.target.classList.contains('reset-project-btn')) return;
       const newName = prompt('Rename project:', proj.name);
       if (newName && newName.trim()) {
         proj.name = newName.trim();
         renderProjectList();
         saveProjectsToStorage();
+      }
+    };
+
+    // Reset button handler
+    const resetBtn = li.querySelector('.reset-project-btn');
+    resetBtn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const projectName = proj.name;
+      if (confirm(`Are you sure you want to reset "${projectName}"? All hypotheses, evidence, and matrix data will be cleared. This action cannot be undone.`)) {
+        // Reset the project data
+        hypotheses = [];
+        evidenceList = [];
+        matrixRatings = [];
+        evidenceActive = [];
+        saveCurrentProject();
+        renderHypothesisCanvas();
+        renderEvidenceLocker();
+        renderACHMatrix();
+        renderResultsDashboard();
       }
     };
 
@@ -776,32 +814,11 @@ function setupNewAnalysisButton() {
   }
 }
 
-// --- Add Clear Project button ---
+// --- Reset Project functionality is now integrated into each project item ---
 function setupClearProjectButton() {
-  let sidebar = document.querySelector('aside');
-  if (!sidebar) return;
-  let clearBtn = document.createElement('button');
-  clearBtn.textContent = 'Clear Project';
-  clearBtn.className = 'px-4 py-2 bg-gray-200 text-[#C6372F] rounded hover:bg-gray-300 transition font-semibold';
-  clearBtn.onclick = () => {
-    if (!confirm('Are you sure you want to clear all data in this project?')) return;
-    hypotheses = [];
-    evidenceList = [];
-    matrixRatings = [];
-    evidenceActive = [];
-    saveCurrentProject();
-    renderHypothesisCanvas();
-    renderEvidenceLocker();
-    renderACHMatrix();
-    renderResultsDashboard();
-  };
-  // Move below the projects list
-  let projectList = sidebar.querySelector('ul');
-  if (projectList) {
-    // Add margin to top for spacing
-    clearBtn.classList.add('mt-8');
-    projectList.insertAdjacentElement('afterend', clearBtn);
-  }
+  // This function is now deprecated since reset functionality is integrated into project items
+  // The reset button is now part of each project item in renderProjectList()
+  console.log('Reset Project functionality is now integrated into project items');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
