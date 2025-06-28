@@ -34,9 +34,10 @@ jobs:
     - name: Copy files for deployment
       run: |
         cp src/index.html .
-        cp src/js/app.js .
-        cp src/js/dropdown.js .
-        cp src/css/style.css .
+        mkdir -p js css
+        cp src/js/app.js js/
+        cp src/js/dropdown.js js/
+        cp src/css/style.css css/
         cp -r src/media .
         
     - name: Setup Pages
