@@ -262,7 +262,7 @@ function renderACHMatrix() {
       <h2 class="text-2xl font-bold text-[#1a2332] tracking-wide flex items-center gap-3">
         <span class="text-3xl">🗂️</span>
         ACH Matrix
-        <span class="text-sm font-normal text-gray-500 ml-2">(Click cells or press Enter/Space to cycle through ratings)</span>
+        <span class="text-sm font-normal text-gray-500 ml-2">(Click cells to cycle through ratings)</span>
       </h2>
       <div class="flex items-center gap-2">
         <span class="text-sm text-gray-600">Active Evidence:</span>
