@@ -262,7 +262,7 @@ function renderACHMatrix() {
       <h2 class="text-2xl font-bold text-[#1a2332] tracking-wide flex items-center gap-3">
         <span class="text-3xl">🗂️</span>
         ACH Matrix
-        <span class="text-sm font-normal text-gray-500 ml-2">(Click cells or press Enter/Space to cycle through ratings)</span>
+        <span class="text-sm font-normal text-gray-500 ml-2">(Click cells to cycle through ratings)</span>
       </h2>
       <div class="flex items-center gap-2">
         <span class="text-sm text-gray-600">Active Evidence:</span>
@@ -299,7 +299,7 @@ function renderACHMatrix() {
 
   // Table wrapper with improved scrolling and responsive design
   const tableWrap = document.createElement('div');
-  tableWrap.className = 'overflow-auto max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100';
+  tableWrap.className = 'overflow-auto max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 matrix-scroll-x';
   const table = document.createElement('table');
   table.className = 'w-full border-collapse';
   table.setAttribute('role', 'grid');
@@ -312,7 +312,7 @@ function renderACHMatrix() {
 
   // Empty corner cell
   const cornerTh = document.createElement('th');
-  cornerTh.className = 'sticky top-0 left-0 bg-gradient-to-br from-gray-50 to-gray-100 z-20 px-4 py-4 border-b-2 border-r-2 border-gray-300 min-w-[200px]';
+  cornerTh.className = 'sticky top-0 left-0 bg-gradient-to-br from-gray-50 to-gray-100 z-20 px-4 py-4 border-b-2 border-r-2 border-gray-300 min-w-[200px] max-w-[300px]';
   cornerTh.innerHTML = `
     <div class="flex items-center justify-between">
       <span class="font-bold text-gray-700">Evidence</span>
@@ -347,7 +347,13 @@ function renderACHMatrix() {
 
     // Evidence label with improved toggle
     const evTh = document.createElement('th');
-    evTh.className = 'sticky left-0 bg-white z-10 px-4 py-3 border-r-2 border-gray-200 text-left min-w-[200px]';
+    evTh.className = 'sticky left-0 bg-white z-10 px-4 py-3 border-r-2 border-gray-200 text-left min-w-[200px] max-w-[300px]';
+    // Helper to insert <br> after every 10 words
+    function insertWordBreaks(str) {
+      if (!str) return '';
+      const words = str.split(/\s+/);
+      return words.map((word, i) => (i > 0 && i % 10 === 0 ? '<br>' : '') + word).join(' ');
+    }
     evTh.innerHTML = `
       <div class="flex items-center gap-3">
         <button 
@@ -360,10 +366,10 @@ function renderACHMatrix() {
           <span class="text-sm">${evidenceActive[rowIdx] ? '👁️' : '🚫'}</span>
         </button>
         <div class="flex-1 min-w-0">
-          <div class="font-medium text-sm text-gray-900 truncate" title="${ev.statement || `Evidence ${rowIdx + 1}`}">
-            ${ev.statement || `Evidence ${rowIdx + 1}`}
+          <div class="font-medium text-sm text-gray-900" title="${ev.statement || `Evidence ${rowIdx + 1}`}">
+            ${insertWordBreaks(ev.statement || `Evidence ${rowIdx + 1}`)}
           </div>
-          ${ev.source ? `<div class="text-xs text-gray-500 truncate" title="${ev.source}">${ev.source}</div>` : ''}
+          ${ev.source ? `<div class="text-xs text-gray-500" title="${ev.source}">${insertWordBreaks(ev.source)}</div>` : ''}
         </div>
       </div>
     `;
@@ -540,7 +546,7 @@ function renderResultsDashboard() {
   const minScore = scored.length > 0 ? scored[0].inconsistencyScore : null;
   const likelySection = document.createElement('div');
   likelySection.className = 'mb-8 flex-1';
-  likelySection.innerHTML = `<h3 class=\"text-lg font-semibold mb-2 text-[#1a2332]\">Most Likely Hypotheses</h3>`;
+  likelySection.innerHTML = `<h3 class=\"text-lg font-semibold mb-2 text-[#1a2332]\">Most Likely Hypotheses</h3><div class=\"text-sm text-gray-500 mb-2\">Lowest score wins (like golf)</div>`;
   const likelyList = document.createElement('ol');
   likelyList.className = 'mb-2';
   scored.forEach((hypo, idx) => {
@@ -693,24 +699,20 @@ function renderProjectList() {
         </div>
         <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
           <button 
-            class="reset-project-btn px-2 py-1 text-orange-400 hover:text-orange-200 hover:bg-orange-900/30 rounded-lg text-xs font-medium transition-all duration-200 hover:scale-105 hover:shadow-md border border-orange-500/20 hover:border-orange-400/40 flex-1"
+            class="reset-project-btn flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-sm hover:bg-blue-700 hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 border border-blue-700/20"
             title="Reset this project - Clear all hypotheses, evidence, and matrix data while keeping the project"
             data-project-idx="${idx}"
           >
-            <span class="flex items-center justify-center gap-1">
-              <span class="text-sm">🔄</span>
-              <span class="text-xs">Reset</span>
-            </span>
+            <span class="text-base">🔄</span>
+            <span>Reset</span>
           </button>
           <button 
-            class="delete-project-btn px-2 py-1 text-red-400 hover:text-red-200 hover:bg-red-900/30 rounded-lg text-xs font-medium transition-all duration-200 hover:scale-105 hover:shadow-md border border-red-500/20 hover:border-red-400/40 flex-1"
+            class="delete-project-btn flex-1 px-3 py-2 bg-red-600 text-white rounded-lg text-xs font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 border border-red-700/20"
             title="Delete this project - Permanently remove the project and all its data"
             data-project-idx="${idx}"
           >
-            <span class="flex items-center justify-center gap-1">
-              <span class="text-sm">🗑️</span>
-              <span class="text-xs">Delete</span>
-            </span>
+            <span class="text-base">🗑️</span>
+            <span>Delete</span>
           </button>
         </div>
       </div>
