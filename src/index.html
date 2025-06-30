@@ -64,10 +64,10 @@
 </head>
 
 <body class="bg-gradient-to-br from-[#181818] via-[#23272a] to-[#23272a] font-sans min-h-screen">
-  <div id="app" class="flex h-screen gap-10 p-8">
+  <div id="app" class="flex md:flex-row flex-col md:h-screen h-auto md:gap-10 gap-4 md:p-8 p-2">
     <!-- Left Panel: Navigation & Project Management -->
     <aside
-      class="w-80 bg-gradient-to-br from-[#23272a] to-[#374151] rounded-3xl shadow-2xl flex flex-col p-8 text-white h-full relative overflow-hidden">
+      class="md:w-80 w-full bg-gradient-to-br from-[#23272a] to-[#374151] rounded-3xl shadow-2xl flex flex-col md:p-8 p-4 text-white md:h-full h-auto relative overflow-hidden mb-4 md:mb-0">
 
       <!-- Header Section -->
       <div class="flex flex-col gap-6 mb-8">
@@ -143,9 +143,9 @@
       </div>
     </aside>
     <!-- Center Panel: Workbench -->
-    <div id="main-panel-container" class="flex-1 flex flex-col relative">
+    <div id="main-panel-container" class="flex-1 flex flex-col relative w-full">
       <main
-        class="flex-1 flex flex-col p-14 overflow-y-auto bg-white/80 shadow-2xl rounded-3xl backdrop-blur-md border border-white/30">
+        class="flex-1 flex flex-col md:p-14 p-4 overflow-y-auto bg-white/80 shadow-2xl rounded-3xl backdrop-blur-md border border-white/30">
         <div class="flex items-center justify-between mb-14">
           <div class="flex flex-col">
             <h1 class="workbench-title text-6xl font-black tracking-tight leading-tight mb-2">

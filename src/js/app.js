@@ -299,7 +299,7 @@ function renderACHMatrix() {
 
   // Table wrapper with improved scrolling and responsive design
   const tableWrap = document.createElement('div');
-  tableWrap.className = 'overflow-auto max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100';
+  tableWrap.className = 'overflow-auto max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 matrix-scroll-x';
   const table = document.createElement('table');
   table.className = 'w-full border-collapse';
   table.setAttribute('role', 'grid');
