@@ -1,0 +1,136 @@
+1. PERSONA
+You are an expert sales copywriter and persuasion scientist. Your expertise combines the direct-response principles of legendary copywriters with the modern, data-driven insights of behavioral psychology and sales intelligence platforms. Your goal is to rewrite a given sales email to maximize engagement (opens, clicks, and replies) by making it more personalized, persuasive, valuable, and human.
+
+2. CONTEXT & GOAL
+My Product/Service: CTI coaching, mentorship, free learning resources
+
+Target Audience (Recipient): cyber security professionals upskilling and cyber security newcomers
+
+Relationship to Recipient: Warm lead from free CTI-related template or CTI skill assessment 
+
+Primary Goal of This Email (Choose ONE): Share relevant personal story to provide context
+
+Key Information About Recipient (if any): They are interested in CTI
+
+3. ORIGINAL EMAIL
+
+"""
+Hello there 👋
+
+If you've been reading my previous email, you may be wondering:
+
+- “Why did you create a coaching and mentorship program?”
+- “What experts do you have to offer?”
+- “Why should I trust you?”
+
+These are all great questions.
+
+To answer them, let me tell you how I broke into the industry, learned the ins and outs of CTI, and what I learned along the way to help build a company specializing in CTI education.
+
+[gif – story time]
+
+A long time ago, I was a professional ice hockey player.
+
+🌎 I traveled the world playing hockey, from the United States to New Zealand. As I got older, time caught up with me, and I needed a new career.
+
+After getting my bachelor’s degree in computer science, I was always keenly interested in cyber security, so I decided to take the leap. I re-trained, got my master’s degree in cyber security engineering, and earned a bunch of entry-level certifications (including the infamous OSCP).
+
+👨‍💻 At the time (like most people new to cyber), I wanted to be a hacker, so I got an alphabet soup of certifications to land my first job.
+
+Also, (like most people entering the industry) finding a job in penetration testing was incredibly difficult, so I settled on a role in security operations as a SOC analyst at a large managed security service provider (MSSP).
+
+I learned much in this role, from practical skills to industry knowledge. I also discovered cyber threat intelligence (CTI), the area of cyber I would dedicate my career to mastering.
+
+[gif – part 2]
+
+My next role was as a senior threat intelligence analyst at an international service provider, where I helped build a CTI and threat-hunting program from scratch.
+
+⚡️ We tracked threat actors, automated threat hunting, and built a comprehensive program capable of tackling the latest threats.
+
+This was awesome. It was everything I had dreamed of when I was studying to become a CTI analyst, and it was the job where I probably learned the most.
+
+😢 Unfortunately, there is not much free learning content or coaching in the CTI field. You either pay a ludicrous amount to take a SANS course or spend hours, weeks, and even years in the saddle learning as you go.
+
+This was frustrating because it took a long time to get the program to where we wanted it and figure out the best way of doing things.
+
+❌ We made many mistakes, wasted a lot of time, and incurred unnecessary costs to the business.
+
+**If only there was another option!**
+
+[gif – part 3]
+
+After building out the CTI program for this large service provider, I was headhunted to do the same at a large telecommunications company in the UK.
+
+🙌 Thankfully, this time, I had learned from the school of hard knocks and hit the ground running.
+
+We built a comprehensive CTI program in half the time, saved the business tons of money, and became innovators.
+
+❤️ I loved this experience. Things moved fast. People saw the value of a high-performance CTI program. We were making a real difference.
+
+In no time, our program became the most valuable asset in the company’s cyber security program and a priority in the business's budget (something not easily achieved).
+
+**I just wished it hadn’t been this hard at first!**
+
+[gif – part 4]
+
+Getting approval and funding for a CTI program is hard. Building a successful program is even harder. You can imagine how challenging it was for the team and me to face both these battles simultaneously!
+
+It doesn’t have to be the same for you.
+
+[A keyboard with text above it
+
+Description automatically generated](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcd7kM-wMS-v7SXfAhRui4n8_mCfrLQ9fSSYe_mT9AWI5LhHKl3BdGEiLcdfTtdr7xI_shcFSO0tYIQVVQX43LKQnptroaSe3n5K-rCv0UmBUZFABT9vVyUXqGGG42g2ORbgmE7VbKFEcfQIgwxLrw?key=HICZEvCxypjbHPUje3Xt2Q)
+
+Kraven Security was created to help anyone who wants to get more out of CTI. We offer a [range of free resources](https://kravensecurity.com/free-learning-resources/) to help you learn the basics and elevate your skillset.
+
+If you want to take things to the next level, our services provide you with the skills and expert guidance you need to master CTI, build a high-performance program, and justify the business's investment in CTI.
+
+Whether you are an individual or a business, we can help you:"""
+
+4. TASK: ANALYZE, CRITIQUE, AND REWRITE
+Execute the following steps in order:
+
+STEP A: INITIAL CRITIQUE & SCORECARD
+Analyze the ORIGINAL EMAIL based on the following principles. Provide a score from 1-10 (1=Poor, 10=Excellent) for each, with a brief justification for your score.
+
+Subject Line Clarity & Intrigue: Is it concise, value-driven, and compelling enough to earn an open?
+
+Opening Hook Personalization: Does the first sentence immediately signal relevance and personalization?
+
+Body Value Proposition: Is the core message focused on customer benefits over product features?
+
+Readability & Formatting: Is the email easy to skim on a mobile device? (Short paragraphs, white space, bullets).
+
+CTA Clarity & Friction: Is there a single, clear, low-friction Call-to-Action?
+
+Tone of Voice: Is the tone conversational and human, or robotic and overly formal?
+
+STEP B: PSYCHOLOGICAL ANALYSIS
+Based on established principles of persuasion (Cialdini, etc.), identify the following:
+
+Persuasion Triggers Used: List any psychological triggers (e.g., Social Proof, Scarcity, Authority) present in the original email.
+
+Missed Opportunities: List the top 3 most powerful psychological triggers that are MISSING and could be incorporated to make the email more persuasive.
+
+STEP C: REWRITE THE EMAIL
+Now, rewrite the ORIGINAL EMAIL from scratch to dramatically improve its effectiveness. Provide two distinct versions based on the likely recipient profile:
+
+Version A: The "Director" Cut (Concise & Direct)
+
+Target Persona: Optimized for a busy, analytical, results-driven executive (e.g., a 'D' or 'C' type in the DISC model).
+
+Style: Extremely concise (ideally under 150 words), data-driven, and focused on the bottom-line outcome.
+
+Version B: The "Influencer" Cut (Narrative & Relational)
+
+Target Persona: Optimized for a more relationship-oriented, collaborative individual (e.g., an 'I' or 'S' type in the DISC model).
+
+Style: Uses a warmer, more conversational tone, incorporates storytelling, and focuses on building rapport and demonstrating empathy.
+
+STEP D: COMPONENT OPTIMIZATION
+Provide 3-5 alternative, high-impact subject lines for the rewritten email. For each, briefly explain the psychological principle it uses (e.g., "Curiosity," "Personalization," "Urgency").
+
+STEP E: EXPLANATION OF CHANGES
+Conclude with a bulleted list that clearly explains the key strategic changes you made in the rewritten versions and why you made them, referencing the principles from your critique.
+
+Example: "Changed the CTA from asking for time ('Book a call') to asking for interest ('Does this sound interesting?') to reduce friction and grant the prospect autonomy, which has been shown to double response rates."
